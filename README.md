@@ -1,1 +1,1 @@
-# Multimodal-tweets-popularity-prediction
+# Tweet_popularity_predictor
