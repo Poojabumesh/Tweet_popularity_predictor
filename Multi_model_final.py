@@ -19,3 +19,6 @@ class Task1EmotionClassification:
         df = self.preprocess(df)
         df['Emotion'] = df['content'].apply(self.classify_tweet).apply(pd.Series)
         return df
+    
+    class Task2HashtagPrediction:
+        
