@@ -1,0 +1,6 @@
+transformers
+torch
+pandas
+snowflake-connector-python
+snowflake-connector-python[secure-local-storage,pandas]
+scikit-learn
