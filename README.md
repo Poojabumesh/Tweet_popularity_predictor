@@ -128,6 +128,24 @@ Main orchestrator that coordinates all three tasks.
 - `Task2HashtagGeneration`: Manages hashtag generation  
 - `Task3PopularityPrediction`: Processes popularity scoring
 
+## Dashboard Results
+
+### Emotion Analysis Over Time
+![Emotion Timeline](results/dashboards/emotion_popularity_timeline.png)
+
+**Key Insights:**
+- Joy is the dominant emotion (7,746 instances vs 1,377 anger)
+- Clear temporal patterns show emotion spikes during major events
+- Model successfully captures emotional trends in social media data
+
+### Top Hashtags Analysis
+![Hashtag Analysis](results/dashboards/hashtags_emotions_summary.png)
+
+**Business Value:**
+- Political hashtags (#ActOnClimate, #TS1989) drive highest engagement
+- Hashtag generation model identifies trending topics effectively
+- Clear correlation between emotion classification and hashtag popularity
+
 ## Advanced Features
 
 ### Model Persistence
