@@ -1,0 +1,219 @@
+Metadata-Version: 2.4
+Name: tweet-popularity-predictor
+Version: 0.1.0
+Summary: Multi-task tweet emotion, hashtag, and popularity predictor
+Author-email: Pooja Baralu umesh <poojabumesh@gmail.com>
+License: MIT
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: torch
+Requires-Dist: transformers
+Requires-Dist: scikit-learn
+
+# Tweet_popularity_predictor
+
+A comprehensive machine learning pipeline that performs three distinct tasks on social media data: emotion classification, hashtag generation, and popularity prediction.
+
+## Features
+
+- **Emotion Classification**: Classify emotions in tweets using DistilBERT
+- **Hashtag Generation**: Generate relevant hashtags using GPT-2
+- **Popularity Prediction**: Predict tweet popularity using embeddings and regression
+- **Multi-Task Processing**: Run all tasks simultaneously or individually
+- **Command-Line Interface**: Easy-to-use CLI for batch processing or single predictions
+
+## Requirements
+
+```bash
+pip install pandas torch transformers scikit-learn numpy pickle-mixin argparse
+```
+
+### Model Dependencies
+- `bhadresh-savani/distilbert-base-uncased-emotion` (Emotion Classification)
+- `gpt2` (Hashtag Generation)  
+- `distilbert-base-uncased` (Text Embeddings for Popularity Prediction)
+
+## Installation
+
+1. Clone or download the script
+2. Install required dependencies:
+```bash
+pip install -r requirements.txt
+```
+3. Run the script with desired parameters
+
+## Usage
+
+### Command Line Arguments
+
+| Argument | Type | Description | Required |
+|----------|------|-------------|----------|
+| `--file` | string | Path to input CSV file | Optional* |
+| `--content` | string | Tweet content for single prediction | Optional* |
+| `--number_of_shares` | int | Number of shares for the tweet | Optional* |
+| `--number_of_likes` | int | Number of likes for the tweet | Optional* |
+| `--task` | string | Task to perform: `emotion`, `hashtags`, `popularity`, `all` | **Required** |
+
+*Either `--file` OR individual tweet parameters (`--content`, `--number_of_shares`, `--number_of_likes`) must be provided.
+
+### Examples
+
+#### 1. Process CSV File - All Tasks
+```bash
+python mtml_model.py --file tweets.csv --task all
+```
+
+#### 2. Single Tweet - Emotion Classification
+```bash
+python mtml_model.py --content "I'm feeling great today!" --number_of_shares 10 --number_of_likes 25 --task emotion
+```
+
+#### 3. Single Tweet - Hashtag Generation
+```bash
+python mtml_model.py --content "Beautiful sunset at the beach" --number_of_shares 5 --number_of_likes 15 --task hashtags
+```
+
+#### 4. Single Tweet - Popularity Prediction
+```bash
+python mtml_model.py --content "Check out this amazing product!" --number_of_shares 20 --number_of_likes 45 --task popularity
+```
+
+## Input Data Format
+
+### CSV File Format
+Your input CSV file should contain the following columns:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `content` | string | Tweet/post content |
+| `number_of_shares` | int | Number of times shared |
+| `number_of_likes` | int | Number of likes received |
+
+Example CSV:
+```csv
+content,number_of_shares,number_of_likes
+"I love this new restaurant!",15,42
+"Traffic is terrible today",3,8
+"Just finished my workout",7,23
+```
+
+## Output
+
+The model generates a `final_result.csv` file containing:
+
+### For All Tasks:
+- **Original columns**: `content`, `number_of_shares`, `number_of_likes`
+- **Emotion**: Predicted emotion label
+- **Hashtags**: Generated hashtag text
+- **hashtags_final**: Extracted hashtags as list
+- **popularity**: Popularity score (0-100 scale)
+- **Additional features**: `content_length`, `hashtags_count`
+
+## Architecture
+
+### Task 1: Emotion Classification
+- **Model**: DistilBERT (fine-tuned on emotion data)
+- **Output**: Emotion labels (joy, sadness, anger, fear, surprise, love)
+- **Method**: Transformer-based text classification
+
+### Task 2: Hashtag Generation  
+- **Model**: GPT-2
+- **Output**: Generated text with hashtags
+- **Method**: Autoregressive text generation with hashtag extraction
+
+### Task 3: Popularity Prediction
+- **Models**: DistilBERT (embeddings) + Linear Regression
+- **Features**: 
+  - Text embeddings (768-dim)
+  - Content length
+  - Hashtag count  
+  - Number of shares/likes
+- **Output**: Popularity score (0-100)
+
+## Model Components
+
+### MTMLModel Class
+Main orchestrator that coordinates all three tasks.
+
+### Task-Specific Classes
+- `Task1EmotionClassification`: Handles emotion prediction
+- `Task2HashtagGeneration`: Manages hashtag generation  
+- `Task3PopularityPrediction`: Processes popularity scoring
+
+## Dashboard Results
+
+### Emotion Analysis Over Time
+![Emotion Timeline](results/dashboards/emotion_popularity_timeline.png)
+
+**Key Insights:**
+- Joy is the dominant emotion (7,746 instances vs 1,377 anger)
+- Clear temporal patterns show emotion spikes during major events
+- Model successfully captures emotional trends in social media data
+
+### Top Hashtags Analysis
+![Hashtag Analysis](results/dashboards/hashtags_emotions_summary.png)
+
+**Business Value:**
+- Political hashtags (#ActOnClimate, #TS1989) drive highest engagement
+- Hashtag generation model identifies trending topics effectively
+- Clear correlation between emotion classification and hashtag popularity
+
+## Advanced Features
+
+### Model Persistence
+The popularity prediction model can be saved and loaded:
+```python
+# Export trained model
+task3.export_model('my_model.pkl')
+
+# Load pre-trained model
+task3.load_model('my_model.pkl')
+```
+
+### Batch Processing
+Process up to 10,000 rows automatically when using CSV input.
+
+### Preprocessing Pipeline
+- Automatic data type conversion
+- Text length calculation
+- Hashtag counting
+- Feature engineering for ML models
+
+## Important Notes
+
+1. **GPU Recommended**: For faster inference with transformer models
+2. **Memory Usage**: Processing large files may require significant RAM
+3. **Model Downloads**: First run will download pre-trained models (~500MB total)
+4. **Data Limit**: CSV processing limited to 10,000 rows for performance
+
+## Troubleshooting
+
+### Common Issues:
+- **ImportError**: Ensure all dependencies are installed
+- **CUDA errors**: Install appropriate PyTorch version for your system
+- **Memory errors**: Reduce batch size or process smaller files
+- **Model download fails**: Check internet connection and Hugging Face availability
+
+### Performance Tips:
+- Use GPU if available (`torch.cuda.is_available()`)
+- Process data in smaller batches for large datasets
+- Pre-download models for offline usage
+
+## Performance Expectations
+
+- **Emotion Classification**: ~100-500 tweets/second
+- **Hashtag Generation**: ~50-200 tweets/second  
+- **Popularity Prediction**: ~200-800 tweets/second
+- **All Tasks**: ~30-100 tweets/second (combined)
+
+*Performance varies based on hardware and tweet length.*
+
+## Contributing
+
+Feel free to submit issues, feature requests, or improvements to enhance the model's capabilities.
+
+## License
+
+This project uses pre-trained models with their respective licenses. Please check individual model licenses before commercial use.

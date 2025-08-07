@@ -1,0 +1,2 @@
+[console_scripts]
+tpp = tpp.cli:main

@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+src/tpp/__init__.py
+src/tpp/cli.py
+src/tpp/model.py
+src/tpp/tasks/__init__.py
+src/tpp/tasks/emotion.py
+src/tpp/tasks/hashtags.py
+src/tpp/tasks/popularity.py
+src/tweet_popularity_predictor.egg-info/PKG-INFO
+src/tweet_popularity_predictor.egg-info/SOURCES.txt
+src/tweet_popularity_predictor.egg-info/dependency_links.txt
+src/tweet_popularity_predictor.egg-info/entry_points.txt
+src/tweet_popularity_predictor.egg-info/requires.txt
+src/tweet_popularity_predictor.egg-info/top_level.txt
