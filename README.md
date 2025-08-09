@@ -25,6 +25,15 @@ codes/scripts/           # optional utilities (e.g. Snowflake loader)
 tests/                   # pytest scaffold
 docs/                    # design notes / notebooks
 ```
+---
+
+## 📈 Dashboards (Snowflake)
+
+> These screenshots were produced after loading predictions to **Snowflake** and building dashboards.  
+
+![Top 10 Hashtags & Top 3 Emotions](results/dashboards/hashtags_emotions_summary.png)
+
+![Emotion by Highest Popularity](results/dashboards/emotion_popularity_timeline.png)
 
 ---
 
